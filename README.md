@@ -10,15 +10,13 @@ Work in progress, started on 15 Nov 2026. Numbers below are from the first full 
 
 ## Why
 
-My thesis asked how to spend a search budget better. TabPFN asks something else: what
-if you do not search at all? Much of the AutoML work I built on (SMAC, auto-sklearn)
-and TabPFN come out of the same research community, so I was curious how much of the
-search idea is left on the small datasets I worked with back then.
+In my thesis I tried to make the search for a good model faster. TabPFN doesn't search
+at all, it just predicts. I used SMAC back then, which comes from Frank Hutter's group,
+and so does TabPFN. So I wanted to know what's left of my approach once the search is gone.
 
-There is also a practical side. Most teams with tabular data have a few hundred or a
-few thousand rows and nobody whose job it is to tune models. For them "good without
-tuning" matters more than the last bit of accuracy, so I wanted numbers on how big the
-gap really is.
+I also think this matters outside of research. A lot of teams have a table with a few
+hundred rows and nobody who tunes models. If something works well without tuning,
+that's what they will end up using.
 
 ## What I compare
 

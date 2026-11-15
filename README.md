@@ -1,75 +1,59 @@
 # search vs pretraining
 
-My bachelor thesis was about making AutoML faster with meta-learning: instead of
-starting the search from scratch, start from what worked on similar datasets
-([code here](https://github.com/jennifoofoo/automl-workbench)).
-TabPFN moves the meta-learning into pretraining and skips the search completely.
-I wanted to see both ideas side by side on small tabular datasets.
+work in progress, started 15 Nov 2026
 
-Work in progress, started on 15 Nov 2026. Numbers below are from the first full run.
+In my bachelor thesis ([code](https://github.com/jennifoofoo/automl-workbench)) I tried to
+make AutoML search faster by starting from configs that worked on similar datasets.
+TabPFN doesn't search at all, it just predicts. I used SMAC back then, which comes from
+Frank Hutter's group, and so does TabPFN. So I wanted to know what's left of my approach
+once the search is gone.
 
-## Why
+Also a lot of teams just have a table with a few hundred rows and nobody who tunes
+models. If something works well without tuning, that's what they'll use.
 
-In my thesis I tried to make the search for a good model faster. TabPFN doesn't search
-at all, it just predicts. I used SMAC back then, which comes from Frank Hutter's group,
-and so does TabPFN. So I wanted to know what's left of my approach once the search is gone.
+## setup
 
-I also think this matters outside of research. A lot of teams have a table with a few
-hundred rows and nobody who tunes models. If something works well without tuning,
-that's what they will end up using.
+35 small classification datasets from OpenML-CC18 (500 to 6000 rows), 3 seeds, 70/30 split,
+train capped at 2000 rows, ROC AUC on the test part.
 
-## What I compare
+- cold: random search over logreg, knn, random forest, extra trees, xgboost. 40 configs, 3-fold CV
+- warm: same, but the first 10 configs come from the 5 most similar datasets (a few simple
+  meta-features, target dataset left out). That's the core idea of my thesis, rebuilt in a small version
+- tabpfn: one fit, no tuning
 
-- **cold search**: random search over 5 algorithms (logistic regression, kNN, random
-  forest, extra trees, XGBoost) and their hyperparameters. 40 configs, 3-fold CV.
-- **warm search**: the same search, but the first 10 configs are the best ones from the
-  5 most similar datasets. Similarity is computed on a handful of simple meta-features
-  and the target dataset is always left out. This is the core idea of my thesis,
-  rebuilt in a small version (the original runs inside a larger AutoML system).
-- **TabPFN**: one fit, no tuning.
+## first numbers
 
-35 small classification datasets from OpenML-CC18 (500 to 6000 rows, up to 60 features),
-3 seeds each, 70/30 split, training set capped at 2000 rows. Metric is ROC AUC on the
-test split (one-vs-rest for multiclass).
-
-## First results
-
-| | mean test AUC | time per dataset |
+| | test AUC (mean) | time per dataset |
 |---|---|---|
-| cold search, after 40 configs | 0.904 | ~24 s |
-| warm search, after 40 configs | 0.904 | ~25 s |
-| TabPFN, one fit | 0.916 | ~8 s (CPU) |
+| cold, 40 configs | 0.904 | ~24 s |
+| warm, 40 configs | 0.904 | ~25 s |
+| tabpfn | 0.916 | ~8 s on cpu |
 
-- TabPFN is ahead on 26 of 35 datasets, 8 are ties (within 0.002 AUC), the search wins 1.
-- The warm start helps early: after 3 to 10 configs it is ahead of the cold search in
-  about 55% of runs (cold ahead in about 30%). After 40 configs the difference is gone.
-  So it gets you there faster, not further, which is what I expected from the thesis.
+TabPFN is ahead on 26 of 35 datasets, 8 are basically ties, the search wins on one (dresses-sales).
 
-## What this does not show
+Warm start is ahead of cold in about 55% of runs after 3 to 10 configs, after 40 there is no
+difference anymore. So faster but not better, roughly what I saw in the thesis too.
 
-- 40 random configs is a small search. A real AutoML system with hours of budget and
-  ensembling would get closer.
-- The search ran with 4 processes in parallel, so the timings are rough.
-- CC18 is a standard benchmark that is also used a lot in TabPFN research, which may
-  favour TabPFN.
+Keep in mind: 40 random configs is a small search, a real AutoML run with ensembling would
+get closer. Timings are rough because the search ran 4 processes in parallel. And CC18 gets
+used a lot in TabPFN research itself.
 
-## Lead scoring
+## leads/
 
-`leads/` is the experiment I started with: four public "did this person buy / churn"
-datasets with only 50 to 1000 labelled rows, TabPFN against logistic regression and
-XGBoost. The question there: how few labelled rows are enough to rank leads in a useful
-way. Plots are in `leads/results/`.
+What I started with. Four public buy/churn datasets, only 50 to 1000 labelled rows,
+tabpfn vs logreg vs xgboost. Plots are in `leads/results`.
 
-## Run it
+## run
 
 ```
 uv sync
 uv run python run_search.py cold
-uv run python run_search.py warm     # needs the cold runs
-uv run python run_tabpfn.py          # needs TABPFN_TOKEN in .env, see .env.example
+uv run python run_search.py warm   # needs the cold runs
+uv run python run_tabpfn.py        # needs TABPFN_TOKEN in .env
 ```
 
-## Next
+## todo
 
-Curves of accuracy over time, and a closer look at which kinds of datasets TabPFN
-wins on most clearly.
+- curves over time instead of just the end result
+- which datasets tabpfn wins on, and why
+- kc2 and credit-g were in my thesis experiments, compare those directly

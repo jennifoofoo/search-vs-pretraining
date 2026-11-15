@@ -47,8 +47,8 @@ test split (one-vs-rest for multiclass).
 
 `leads/` is the experiment I started with: four public "did this person buy / churn"
 datasets with only 50 to 1000 labelled rows, TabPFN against logistic regression and
-XGBoost. I built an account scoring pipeline at work where we never had enough history
-for a model, so I wanted to know how little data is enough. Plots are in `leads/results/`.
+XGBoost. The question there: how few labelled rows are enough to rank leads in a useful
+way. Plots are in `leads/results/`.
 
 ## Run it
 

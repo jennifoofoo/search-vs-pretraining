@@ -2171,6 +2171,43 @@ wheels = [
 ]
 
 [[package]]
+name = "search-vs-pretraining"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "anthropic" },
+    { name = "joblib" },
+    { name = "matplotlib" },
+    { name = "openml" },
+    { name = "pandas" },
+    { name = "python-dotenv" },
+    { name = "scikit-learn" },
+    { name = "tabpfn" },
+    { name = "xgboost" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "anthropic", specifier = ">=2.8.0" },
+    { name = "joblib", specifier = ">=1.6.0" },
+    { name = "matplotlib", specifier = ">=3.11.2" },
+    { name = "openml", specifier = ">=0.15.1" },
+    { name = "pandas", specifier = ">=3.1.1" },
+    { name = "python-dotenv", specifier = ">=1.2.4" },
+    { name = "scikit-learn", specifier = ">=1.9.1" },
+    { name = "tabpfn", specifier = ">=10.0.0" },
+    { name = "xgboost", specifier = ">=3.4.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=9.2.0" }]
+
+[[package]]
 name = "setuptools"
 version = "84.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2249,41 +2286,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/f2/c2/9999f2e622ad5df05
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/d2/04ba071c068379a333966542000759f67adeb89a18d5e60656fd3b6f12d6/tabpfn-10.0.0-py3-none-any.whl", hash = "sha256:6f0c1265c55e3a7cfe25b72f2c6b9269bbef5c6a9c7f10e8a9a31451df1c9358", size = 868319, upload-time = "2026-11-13T15:16:34.519Z" },
 ]
-
-[[package]]
-name = "tabpfn-leads"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "anthropic" },
-    { name = "matplotlib" },
-    { name = "openml" },
-    { name = "pandas" },
-    { name = "python-dotenv" },
-    { name = "scikit-learn" },
-    { name = "tabpfn" },
-    { name = "xgboost" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "anthropic", specifier = ">=2.8.0" },
-    { name = "matplotlib", specifier = ">=3.11.2" },
-    { name = "openml", specifier = ">=0.15.1" },
-    { name = "pandas", specifier = ">=3.1.1" },
-    { name = "python-dotenv", specifier = ">=1.2.4" },
-    { name = "scikit-learn", specifier = ">=1.9.1" },
-    { name = "tabpfn", specifier = ">=10.0.0" },
-    { name = "xgboost", specifier = ">=3.4.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.2.0" }]
 
 [[package]]
 name = "threadpoolctl"

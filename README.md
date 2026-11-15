@@ -8,6 +8,18 @@ I wanted to see both ideas side by side on small tabular datasets.
 
 Work in progress, started on 15 Nov 2026. Numbers below are from the first full run.
 
+## Why
+
+My thesis asked how to spend a search budget better. TabPFN asks something else: what
+if you do not search at all? Much of the AutoML work I built on (SMAC, auto-sklearn)
+and TabPFN come out of the same research community, so I was curious how much of the
+search idea is left on the small datasets I worked with back then.
+
+There is also a practical side. Most teams with tabular data have a few hundred or a
+few thousand rows and nobody whose job it is to tune models. For them "good without
+tuning" matters more than the last bit of accuracy, so I wanted numbers on how big the
+gap really is.
+
 ## What I compare
 
 - **cold search**: random search over 5 algorithms (logistic regression, kNN, random

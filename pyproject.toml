@@ -1,0 +1,23 @@
+[project]
+name = "tabpfn-leads"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=2.8.0",
+    "matplotlib>=3.11.2",
+    "openml>=0.15.1",
+    "pandas>=3.1.1",
+    "python-dotenv>=1.2.4",
+    "scikit-learn>=1.9.1",
+    "tabpfn>=10.0.0",
+    "xgboost>=3.4.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

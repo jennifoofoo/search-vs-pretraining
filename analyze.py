@@ -82,3 +82,16 @@ for k in [3, 5, 10, 20, 40]:
     diff = m.warm - m.cold
     p = wilcoxon(m.warm, m.cold).pvalue
     print(f"  warm vs cold after {k:2d} configs: mean diff {diff.mean():+.4f}, {int((diff > 0).sum())} of {len(diff)} positive, p = {p:.2g}")
+
+# --- does a bigger / smarter search close the gap? 200 configs, random vs smac (cold and warm)
+big = {}
+for arm in ["cold200", "smac_cold", "smac_warm"]:
+    rr = [json.load(open(f)) for f in sorted(glob.glob(f"results/{arm}/*.json"))]
+    big[arm] = pd.DataFrame([{"did": r["did"], "test": r["traj"][-1]["test"]} for r in rr]).groupby("did").test.mean()
+big = pd.DataFrame(big).join(tp.groupby("did").test.mean().rename("tabpfn"))
+print("\nafter 200 configs:")
+print(big.mean().round(4).to_string())
+for a in ["cold200", "smac_cold", "smac_warm"]:
+    diff = big.tabpfn - big[a]
+    print(f"  tabpfn vs {a}: {int((diff > 0).sum())} of 35 ahead, p = {wilcoxon(big.tabpfn, big[a]).pvalue:.2g}")
+print(f"  smac vs random: p = {wilcoxon(big.smac_cold, big.cold200).pvalue:.2g}")

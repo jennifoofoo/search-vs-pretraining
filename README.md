@@ -37,7 +37,11 @@ on mostly categorical data (0.004 vs 0.012 on numeric). With 35 datasets these a
 tendencies, not more. kc2 and credit-g were in my thesis experiments too: a tie on kc2,
 tabpfn slightly ahead on credit-g.
 
-40 random configs is a small search though, and timings are rough (4 processes in parallel).
+40 random configs is a small search, so I also ran 200 configs, once random and once with
+SMAC (cold and warm started). It doesn't change much: random 0.904, SMAC 0.903, SMAC warm
+0.905, tabpfn still 0.916 and ahead on 31 or 32 of 35. SMAC is not better than random here
+(p = 0.8). My guess is that the search space is the limit (5 algorithms, no ensembling),
+not the budget. Timings are rough (several processes in parallel).
 
 `leads/` is what I started with: tabpfn vs logreg vs xgboost on four buy/churn datasets
 with only 50 to 1000 rows.
@@ -46,6 +50,7 @@ with only 50 to 1000 rows.
 uv sync
 uv run python run_search.py cold
 uv run python run_search.py warm
+uv run python run_search.py smac_cold   # also smac_warm, cold200
 uv run python run_tabpfn.py    # needs TABPFN_TOKEN in .env
 uv run python analyze.py
 ```

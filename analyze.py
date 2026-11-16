@@ -65,3 +65,20 @@ per["cat"] = np.where(per.frac_cat > 0.5, "mostly categorical", "mostly numeric"
 print(per.groupby("cat").gap.agg(["mean", "count"]).round(3).to_string())
 print("\nthesis datasets:")
 print(per.loc[["kc2", "credit-g"], ["cold", "warm", "tabpfn", "gap"]].round(3).to_string())
+
+# --- is any of this more than noise? paired tests over the 35 datasets (seeds averaged first)
+from scipy.stats import wilcoxon
+
+print("\nwilcoxon signed-rank, paired by dataset:")
+for a, b in [("tabpfn", "cold"), ("tabpfn", "warm"), ("tabpfn", "best_search")]:
+    diff = per[a] - per[b]
+    print(f"  {a} vs {b}: median diff {diff.median():.4f}, {int((diff > 0).sum())} of {len(diff)} positive, p = {wilcoxon(per[a], per[b]).pvalue:.2g}")
+
+# warm vs cold at the same number of configs
+for k in [3, 5, 10, 20, 40]:
+    c = pd.DataFrame([{"did": r["did"], "seed": r["seed"], "cold": r["traj"][k - 1]["test"]} for r in runs["cold"]])
+    w = pd.DataFrame([{"did": r["did"], "seed": r["seed"], "warm": r["traj"][k - 1]["test"]} for r in runs["warm"]])
+    m = c.merge(w).groupby("did")[["cold", "warm"]].mean()
+    diff = m.warm - m.cold
+    p = wilcoxon(m.warm, m.cold).pvalue
+    print(f"  warm vs cold after {k:2d} configs: mean diff {diff.mean():+.4f}, {int((diff > 0).sum())} of {len(diff)} positive, p = {p:.2g}")

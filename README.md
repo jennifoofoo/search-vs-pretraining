@@ -24,6 +24,10 @@ once the search is gone.
 tabpfn is ahead on 26 of 35 datasets, 8 ties, search wins one.
 warm start is ahead of cold early on (after 3 to 10 configs), after 40 no difference.
 
+paired wilcoxon test over the 35 datasets: tabpfn vs the better search p < 0.0001
+(ahead on 31, mostly by a little, median 0.006 AUC). Warm vs cold is only clearly
+there after 5 configs (p = 0.006), at 3 and 10 it is borderline, later nothing.
+
 ![race](results/race.png)
 
 where the gap is biggest (`results/gap.png`, `results/per_dataset.csv`): on the medium hard
